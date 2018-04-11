@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TicTacToe</string>
+    <string name="title_activity_choose_side">ChooseSide</string>
+    <string name="title_activity_game">Game</string>
+    <string name="title_activity_options">Options</string>
+    <string name="title_activity_game5by5">Game5by5</string>
+</resources>
