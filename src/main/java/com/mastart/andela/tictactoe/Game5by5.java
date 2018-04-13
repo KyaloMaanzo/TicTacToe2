@@ -3,12 +3,12 @@ package com.mastart.andela.tictactoe;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -37,13 +36,14 @@ public class Game5by5 extends AppCompatActivity
     private ArrayList<String> mylist;
 
     private AlertDialog dialog;
-    private ImageView img_newgame, img_menu ,alertimg_newgame, alertimg_menu, alertimg_close;
+    private TextView txtnewgame, txtmenu;
+    private RelativeLayout alertrl_newgame, alertrl_menu, alertrl_close;
 
     ArrayList<TableRow> rows = new ArrayList<>();
     ArrayList<TableRow> rowsfor1 = new ArrayList<>();
     ArrayList<TableRow> rowsfor2 = new ArrayList<>();
 
-    private int side, myside;
+    private String side, myside;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -63,19 +63,19 @@ public class Game5by5 extends AppCompatActivity
         table5Row4 = tableLayout.findViewById(R.id.table5row4);
         table5Row5 = tableLayout.findViewById(R.id.table5row5);
 
-        img_newgame = findViewById(R.id.img_newgame);
-        img_menu = findViewById(R.id.img_menu);
+        txtnewgame = findViewById(R.id.txtnewgame);
+        txtmenu = findViewById(R.id.txtmenu);
 
-        img_newgame.setOnClickListener(new View.OnClickListener() {
+        txtnewgame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RefreshTable();
                 TableSetEnabled(true);
-                img_newgame.setVisibility(View.INVISIBLE);
-                img_menu.setVisibility(View.INVISIBLE);
+                txtnewgame.setVisibility(View.INVISIBLE);
+                txtmenu.setVisibility(View.INVISIBLE);
             }
         });
 
-        img_menu.setOnClickListener(new View.OnClickListener() {
+        txtmenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent main = new Intent(context, MainActivity.class);
                 startActivity(main);
@@ -101,20 +101,22 @@ public class Game5by5 extends AppCompatActivity
 
         RefreshMyList();
 
-        final int otherside;
+        final String otherside;
         sideselected = getIntent().getStringExtra("sideselected");
         if(sideselected.equals("x_s"))
         {
-            myside = R.drawable.img_x;
-            otherside = R.drawable.img_o;
+            myside = "X";
+            otherside = "O";
         }
         else
         {
-            myside = R.drawable.img_o;
-            otherside = R.drawable.img_x;
+            myside = "O";
+            otherside = "X";
         }
 
         side = myside;
+
+        Typeface tf = ResourcesCompat.getFont(context, R.font.mvboli);
 
         int x = 1;
         for(final TableRow tablerow : table5rows)
@@ -122,18 +124,21 @@ public class Game5by5 extends AppCompatActivity
             while(x <= 25)
             {
                 final int tmpx = x;
-                final ImageView imgview = new ImageView(context);
-                imgview.setLayoutParams(rowparams);
-                imgview.setPadding(28,0,0,14);
-                imgview.setId(x);
-                imgview.setOnClickListener(new View.OnClickListener() {
+                final TextView txtview = new TextView(context);
+                txtview.setLayoutParams(rowparams);
+                txtview.setTextColor(Color.WHITE);
+                txtview.setTypeface(tf);
+                txtview.setTextSize(35f);
+                txtview.setGravity(Gravity.CENTER);
+                txtview.setId(x);
+                txtview.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        if(imgview.getTag() == null)
+                        if(txtview.getTag() == null)
                         {
-                            imgview.setImageResource(side);
+                            txtview.setText(side);
                             if(side == myside)
                             {
-                                imgview.setTag("has_myside");
+                                txtview.setTag("has_myside");
                                 if(playvs.equals("human"))
                                 {
                                     side = otherside;
@@ -141,7 +146,7 @@ public class Game5by5 extends AppCompatActivity
                             }
                             else
                             {
-                                imgview.setTag("has_otherside");
+                                txtview.setTag("has_otherside");
                                 if(playvs.equals("human"))
                                 {
                                     side = myside;
@@ -165,33 +170,33 @@ public class Game5by5 extends AppCompatActivity
 
                                     if(randomid < 6)
                                     {
-                                        ImageView randomimgview = (ImageView) table5Row1.getChildAt(randomid-1);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table5Row1.getChildAt(randomid-1);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     else if(randomid < 11)
                                     {
-                                        ImageView randomimgview = (ImageView) table5Row2.getChildAt(randomid-6);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table5Row2.getChildAt(randomid-6);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     else if(randomid < 16)
                                     {
-                                        ImageView randomimgview = (ImageView) table5Row3.getChildAt(randomid-11);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table5Row3.getChildAt(randomid-11);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     else if(randomid < 21)
                                     {
-                                        ImageView randomimgview = (ImageView) table5Row4.getChildAt(randomid-16);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table5Row4.getChildAt(randomid-16);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     else
                                     {
-                                        ImageView randomimgview = (ImageView) table5Row5.getChildAt(randomid-21);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table5Row5.getChildAt(randomid-21);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
 
                                     //check if comp wins
@@ -211,7 +216,7 @@ public class Game5by5 extends AppCompatActivity
 
                     }
                 });
-                tablerow.addView(imgview);
+                tablerow.addView(txtview);
 
                 x++;
                 if(x == 6 || x == 11 || x == 16 || x == 21){ break; }
@@ -284,9 +289,9 @@ public class Game5by5 extends AppCompatActivity
         {
             for(int x=0;x<5;x++)
             {
-                ImageView imgview = (ImageView)tr.getChildAt(x);
-                imgview.setImageResource(0);
-                imgview.setTag(null);
+                TextView txtview = (TextView)tr.getChildAt(x);
+                txtview.setText("");
+                txtview.setTag(null);
             }
 
         }
@@ -299,8 +304,8 @@ public class Game5by5 extends AppCompatActivity
         {
             for(int x=0;x<5;x++)
             {
-                ImageView imgview = (ImageView)tr.getChildAt(x);
-                imgview.setEnabled(enable);
+                TextView txtview = (TextView)tr.getChildAt(x);
+                txtview.setEnabled(enable);
             }
 
         }
@@ -311,8 +316,8 @@ public class Game5by5 extends AppCompatActivity
         for(int x=0;x<2;x++)
         {
             Boolean winning = true;
-            ImageView img = (ImageView)tableRow.getChildAt(x);
-            String whichside = (String)img.getTag();
+            TextView txt = (TextView)tableRow.getChildAt(x);
+            String whichside = (String)txt.getTag();
 
             int b;
             if(x == 0){ b = 4; }
@@ -321,8 +326,8 @@ public class Game5by5 extends AppCompatActivity
             {
                 for(int y=x+1;y<b;y++)
                 {
-                    ImageView tmpimg = (ImageView)tableRow.getChildAt(y);
-                    String tmpwhichside = (String)tmpimg.getTag();
+                    TextView tmptxt = (TextView)tableRow.getChildAt(y);
+                    String tmpwhichside = (String)tmptxt.getTag();
 
                     if(tmpwhichside == null || !tmpwhichside.equals(whichside))
                     {
@@ -349,8 +354,8 @@ public class Game5by5 extends AppCompatActivity
         for(TableRow tr : rows)
         {
             Boolean winning = true;
-            ImageView img = (ImageView)tr.getChildAt(columnindex);
-            String whichside = (String)img.getTag();
+            TextView txt = (TextView)tr.getChildAt(columnindex);
+            String whichside = (String)txt.getTag();
 
             if(whichside != null)
             {
@@ -363,8 +368,8 @@ public class Game5by5 extends AppCompatActivity
 
                 for(TableRow tmptr : rows_to_use)
                 {
-                    ImageView tmpimg = (ImageView)tmptr.getChildAt(columnindex);
-                    String tmpwhichside = (String)tmpimg.getTag();
+                    TextView tmptxt = (TextView)tmptr.getChildAt(columnindex);
+                    String tmpwhichside = (String)tmptxt.getTag();
 
                     if(tmpwhichside == null || !tmpwhichside.equals(whichside))
                     {
@@ -393,8 +398,8 @@ public class Game5by5 extends AppCompatActivity
             Boolean winning = true;
             if(x == 2){ continue; }
 
-            ImageView img = (ImageView) tr.getChildAt(x);
-            String whichside = (String)img.getTag();
+            TextView txt = (TextView) tr.getChildAt(x);
+            String whichside = (String)txt.getTag();
 
             int b = x;
             for(TableRow tmptr : rows_to_use)
@@ -405,8 +410,8 @@ public class Game5by5 extends AppCompatActivity
                 }
                 else{ b--; }
 
-                ImageView tmpimg = (ImageView)tmptr.getChildAt(b);
-                String tmpwhichside = (String)tmpimg.getTag();
+                TextView tmptxt = (TextView)tmptr.getChildAt(b);
+                String tmpwhichside = (String)tmptxt.getTag();
 
                 if(tmpwhichside == null || !tmpwhichside.equals(whichside))
                 {
@@ -441,13 +446,11 @@ public class Game5by5 extends AppCompatActivity
         txt1 = view.findViewById(R.id.alertdialog_txt1);
         txt2 = view.findViewById(R.id.alertdialog_txt2);
 
-        alertimg_newgame = view.findViewById(R.id.alertimg_new_game);
-        alertimg_menu = view.findViewById(R.id.alertimg_menu);
-        alertimg_close = view.findViewById(R.id.alertimg_close);
+        alertrl_newgame = view.findViewById(R.id.alertrl_newgame);
+        alertrl_menu = view.findViewById(R.id.alertrl_menu);
+        alertrl_close = view.findViewById(R.id.alertrl_close);
 
         otheruser.setText(player2name+"'s Score: ");
-        alertimg_newgame.setClipToOutline(true);
-        alertimg_menu.setClipToOutline(true);
 
         if(side.equals("has_myside"))
         {
@@ -487,30 +490,30 @@ public class Game5by5 extends AppCompatActivity
 
         dialog = alert.create();
 
-        alertimg_newgame.setOnTouchListener(MyTouchListener(alertimg_newgame));
-        alertimg_menu.setOnTouchListener(MyTouchListener(alertimg_menu));
-        alertimg_close.setOnTouchListener(MyTouchListener(alertimg_close));
+        alertrl_newgame.setOnTouchListener(MyTouchListener(alertrl_newgame));
+        alertrl_menu.setOnTouchListener(MyTouchListener(alertrl_menu));
+        alertrl_close.setOnTouchListener(MyTouchListener(alertrl_close));
 
         dialog.show();
     }
 
-    private View.OnTouchListener MyTouchListener(final ImageView imgview)
+    private View.OnTouchListener MyTouchListener(final RelativeLayout rl)
     {
         return (new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        imgview.setBackgroundResource(R.drawable.alertimg_style_clikd);
+                        rl.setBackgroundResource(R.drawable.alertrl_style_clikd);
                         break;
                     case MotionEvent.ACTION_UP:
-                        imgview.setBackgroundResource(0);
-                        if(imgview == alertimg_newgame)
+                        rl.setBackgroundResource(0);
+                        if(rl == alertrl_newgame)
                         {
                             dialog.dismiss();
                             RefreshTable();
                         }
-                        else if(imgview == alertimg_menu)
+                        else if(rl == alertrl_menu)
                         {
                             dialog.dismiss();
                             Intent main = new Intent(context, MainActivity.class);
@@ -520,8 +523,9 @@ public class Game5by5 extends AppCompatActivity
                         {
                             dialog.dismiss();
                             TableSetEnabled(false);
-                            img_newgame.setVisibility(View.VISIBLE);
-                            img_menu.setVisibility(View.VISIBLE);
+                            txtnewgame.setVisibility(View.VISIBLE);
+                            txtmenu.setVisibility(View.VISIBLE);
+
                         }
                         break;
                 }

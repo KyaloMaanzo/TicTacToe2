@@ -69,37 +69,52 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="70dp">
-            <ImageView
-                android:src="@drawable/alertimg_newgame"
-                android:id="@+id/alertimg_new_game"
-                android:layout_weight="1"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="14dp"
-                android:layout_marginLeft="14dp"
-                android:layout_marginBottom="7dp"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
-            <ImageView
-                android:paddingTop="4dp"
-                android:scaleType="centerCrop"
-                android:layout_marginTop="14dp"
-                android:layout_marginLeft="14dp"
-                android:layout_marginRight="14dp"
-                android:layout_marginBottom="7dp"
-                android:src="@drawable/alertimg_menu"
-                android:id="@+id/alertimg_menu"
-                android:layout_weight="1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent" />
+        <RelativeLayout
+            android:layout_margin="14dp"
+            android:layout_width="0dp"
+            android:id="@+id/alertrl_newgame"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="18dp"
+                android:textColor="#FFFFFF"
+                android:text="new game"
+                android:fontFamily="@font/mvboli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_margin="14dp"
+            android:layout_width="0dp"
+            android:id="@+id/alertrl_menu"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <TextView
+                android:textSize="18dp"
+                android:textColor="#FFFFFF"
+                android:text="menu"
+                android:fontFamily="@font/mvboli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
     </LinearLayout>
-    <ImageView
-        android:id="@+id/alertimg_close"
-        android:layout_marginBottom="8dp"
-        android:paddingRight="7dp"
+    <RelativeLayout
         android:layout_gravity="center"
-        android:src="@drawable/alert_close"
-        android:layout_width="126dp"
-        android:layout_height="63dp" />
+        android:layout_marginBottom="14dp"
+        android:layout_width="177dp"
+        android:id="@+id/alertrl_close"
+        android:gravity="center"
+        android:layout_height="42dp">
+        <TextView
+            android:textSize="18dp"
+            android:textColor="#FFFFFF"
+            android:text="close"
+            android:fontFamily="@font/mvboli"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 
 </LinearLayout>

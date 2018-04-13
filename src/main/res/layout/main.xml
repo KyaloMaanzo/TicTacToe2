@@ -31,48 +31,19 @@
             android:layout_width="210dp"
             android:layout_height="52dp" />
         </LinearLayout>
-        <LinearLayout
-            android:visibility="gone"
-            android:orientation="vertical"
-            android:layout_marginBottom="49dp"
-            android:layout_marginRight="91dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="42dp" />
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="28dp" />
-        </LinearLayout>
-        <LinearLayout
-            android:visibility="gone"
-            android:layout_marginBottom="49dp"
-            android:layout_marginRight="28dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-            android:orientation="vertical"
-            android:layout_width="56dp"
-            android:layout_height="wrap_content">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="42dp" />
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="28dp" />
-        </LinearLayout>
     </RelativeLayout>
     <LinearLayout
         android:visibility="gone"
         android:orientation="vertical"
         android:id="@+id/ll_options"
-        android:background="@drawable/brownboard"
         android:layout_height="match_parent"
         android:layout_width="match_parent">
-        <ImageView
-            android:src="@drawable/title_options"
+        <TextView
+            android:paddingLeft="49dp"
+            android:textColor="@color/yellowbrown"
+            android:textSize="42dp"
+            android:text="options"
+            android:fontFamily="@font/mvboli"
             android:layout_marginTop="35dp"
             android:layout_width="match_parent"
             android:layout_height="77dp" />
@@ -80,37 +51,41 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="70dp">
-            <ImageView
+            <TextView
+                android:textSize="21dp"
+                android:textColor="#000000"
                 android:paddingTop="14dp"
-                android:paddingLeft="28dp"
-                android:src="@drawable/txtchooseside"
+                android:fontFamily="@font/comic"
+                android:paddingLeft="35dp"
+                android:text="choose side"
                 android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
             <RelativeLayout
                 android:layout_weight="1"
                 android:id="@+id/rlimg_x_s"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:paddingRight="10dp"
-                android:paddingTop="18dp"
                 android:layout_height="match_parent" >
-                <ImageView
-                    android:src="@drawable/x_s"
+                <TextView
+                    android:textSize="21dp"
+                    android:textColor="@color/colorAccent"
+                    android:fontFamily="@font/mvboli"
+                    android:gravity="center"
+                    android:text="X's"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_weight="1"
                 android:id="@+id/rlimg_o_s"
-                android:layout_gravity="center"
                 android:layout_width="0dp"
-                android:layout_marginRight="14dp"
-                android:paddingRight="7dp"
-                android:paddingTop="18dp"
                 android:layout_height="match_parent" >
-                <ImageView
-                    android:src="@drawable/o_s"
+                <TextView
+                    android:textSize="21dp"
+                    android:textColor="@color/colorAccent"
+                    android:fontFamily="@font/mvboli"
+                    android:gravity="center"
+                    android:text="O's"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
             </RelativeLayout>
@@ -119,21 +94,33 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="70dp">
-            <ImageView
-                android:paddingLeft="28dp"
-                android:src="@drawable/txtboard"
+            <TextView
+                android:textSize="21dp"
+                android:textColor="#000000"
+                android:paddingTop="14dp"
+                android:fontFamily="@font/comic"
+                android:paddingLeft="35dp"
+                android:text="board"
                 android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
-            <ImageView
-                android:src="@mipmap/img3x3_clikd"
-                android:id="@+id/img3by3"
+            <TextView
+                android:id="@+id/txt3by3"
+                android:textSize="28dp"
+                android:textColor="@color/yellowbrown"
+                android:fontFamily="@font/mvboli"
+                android:gravity="center"
+                android:text="3x3"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
-            <ImageView
-                android:src="@mipmap/img5x5"
-                android:id="@+id/img5by5"
+            <TextView
+                android:id="@+id/txt5by5"
+                android:textSize="28dp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/mvboli"
+                android:gravity="center"
+                android:text="5x5"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
@@ -143,23 +130,33 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="70dp">
-            <ImageView
-                android:paddingLeft="27dp"
-                android:src="@drawable/txtplayvs"
+            <TextView
+                android:textSize="21dp"
+                android:textColor="#000000"
+                android:paddingTop="14dp"
+                android:fontFamily="@font/comic"
+                android:paddingLeft="35dp"
+                android:text="play vs"
                 android:layout_weight="2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
-            <ImageView
-                android:src="@mipmap/txthuman"
-                android:id="@+id/img_human"
-                android:paddingRight="14dp"
+            <TextView
+                android:id="@+id/txthuman"
+                android:textSize="25dp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="@font/mvboli"
+                android:gravity="center"
+                android:text="human"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
-            <ImageView
-                android:src="@mipmap/txtcomp_clikd"
-                android:id="@+id/img_comp"
-                android:paddingBottom="7dp"
+            <TextView
+                android:id="@+id/txtcomp"
+                android:textSize="25dp"
+                android:textColor="@color/yellowbrown"
+                android:fontFamily="@font/mvboli"
+                android:gravity="center"
+                android:text="comp"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent" />
@@ -174,13 +171,17 @@
                 android:layout_marginRight="70dp"
                 android:layout_width="match_parent"
                 android:layout_height="42dp" />
-        <ImageView
-            android:src="@drawable/img_done"
-            android:id="@+id/img_done"
+        <TextView
             android:layout_marginTop="21dp"
+            android:layout_marginRight="18dp"
+            android:id="@+id/btndone"
+            android:textSize="28dp"
+            android:textColor="@color/yellowbrown"
+            android:fontFamily="@font/mvboli"
+            android:text="done>"
             android:layout_gravity="right"
-            android:layout_width="100dp"
-            android:layout_height="63dp" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
 
     </LinearLayout>

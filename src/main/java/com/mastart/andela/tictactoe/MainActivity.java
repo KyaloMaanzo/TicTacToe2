@@ -2,6 +2,7 @@ package com.mastart.andela.tictactoe;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -12,13 +13,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
 {
     private Context context;
     private RelativeLayout rl_welcome, rlimg_x_s, rlimg_o_s;
-    private ImageView img_play, img_quit, img3by3, img5by5, imghuman, imgcomp, imgdone;
+    private ImageView img_play, img_quit;
+    private TextView txt3by3, txt5by5, txthuman, txtcomp, btndone;
     private EditText txtplayername;
 
     private LinearLayout ll_options;
@@ -38,14 +41,14 @@ public class MainActivity extends AppCompatActivity
         rlimg_x_s = findViewById(R.id.rlimg_x_s);
         rlimg_o_s = findViewById(R.id.rlimg_o_s);
 
-        img3by3 = findViewById(R.id.img3by3);
-        img5by5 = findViewById(R.id.img5by5);
-        imghuman = findViewById(R.id.img_human);
-        imgcomp = findViewById(R.id.img_comp);
+        txt3by3 = findViewById(R.id.txt3by3);
+        txt5by5 = findViewById(R.id.txt5by5);
+        txthuman = findViewById(R.id.txthuman);
+        txtcomp = findViewById(R.id.txtcomp);
 
         txtplayername = findViewById(R.id.txtotherusername);
 
-        imgdone = findViewById(R.id.img_done);
+        btndone = findViewById(R.id.btndone);
 
         img_play.setClipToOutline(true);
         img_quit.setClipToOutline(true);
@@ -54,13 +57,13 @@ public class MainActivity extends AppCompatActivity
 
         rlimg_x_s.setOnClickListener(MyClicklistener("rlimg_x_s"));
         rlimg_o_s.setOnClickListener(MyClicklistener("rlimg_o_s"));
-        img3by3.setOnClickListener(MyClicklistener("img3by3"));
-        img5by5.setOnClickListener(MyClicklistener("img5by5"));
-        imghuman.setOnClickListener(MyClicklistener("imghuman"));
-        imgcomp.setOnClickListener(MyClicklistener("imgcomp"));
+        txt3by3.setOnClickListener(MyClicklistener("txt3by3"));
+        txt5by5.setOnClickListener(MyClicklistener("txt5by5"));
+        txthuman.setOnClickListener(MyClicklistener("txthuman"));
+        txtcomp.setOnClickListener(MyClicklistener("txtcomp"));
 
 
-        imgdone.setOnClickListener(new View.OnClickListener() {
+        btndone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(sideselected == null)
                 {
@@ -125,14 +128,14 @@ public class MainActivity extends AppCompatActivity
                         else
                         {
                             //reset
-                            rlimg_x_s.setBackgroundResource(R.drawable.rlimgxsos_style);
-                            rlimg_o_s.setBackgroundResource(R.drawable.rlimgxsos_style);
+                            rlimg_x_s.setBackgroundResource(0);
+                            rlimg_o_s.setBackgroundResource(0);
                             sideselected = null;
-                            img3by3.setImageResource(R.mipmap.img3x3_clikd);
-                            img5by5.setImageResource(R.mipmap.img5x5);
+                            txt3by3.setTextColor(getResources().getColor(R.color.yellowbrown));
+                            txt5by5.setTextColor(Color.WHITE);
                             boardtype = "3by3";
-                            imghuman.setImageResource(R.mipmap.txthuman);
-                            imgcomp.setImageResource(R.mipmap.txtcomp_clikd);
+                            txthuman.setTextColor(Color.WHITE);
+                            txtcomp.setTextColor(getResources().getColor(R.color.yellowbrown));
                             playvs = "comp";
                             player2name = null;
                             txtplayername.setVisibility(View.INVISIBLE);
@@ -154,36 +157,36 @@ public class MainActivity extends AppCompatActivity
                 {
                     case "rlimg_x_s":
                         sideselected = "x_s";
-                        rlimg_o_s.setBackgroundResource(R.drawable.rlimgxsos_style);
+                        rlimg_o_s.setBackgroundResource(0);
                         rlimg_x_s.setBackgroundResource(R.drawable.rlimgxsos_style_selected);
                         break;
                     case "rlimg_o_s":
                         sideselected = "o_s";
-                        rlimg_x_s.setBackgroundResource(R.drawable.rlimgxsos_style);
+                        rlimg_x_s.setBackgroundResource(0);
                         rlimg_o_s.setBackgroundResource(R.drawable.rlimgxsos_style_selected);
                         break;
-                    case "img3by3":
-                        img3by3.setImageResource(R.mipmap.img3x3_clikd);
-                        img5by5.setImageResource(R.mipmap.img5x5);
+                    case "txt3by3":
+                        txt3by3.setTextColor(getResources().getColor(R.color.yellowbrown));
+                        txt5by5.setTextColor(Color.WHITE);
                         boardtype = "3by3";
                         break;
-                    case "img5by5":
-                        img5by5.setImageResource(R.mipmap.img5x5_clikd);
-                        img3by3.setImageResource(R.mipmap.img3x3);
+                    case "txt5by5":
+                        txt5by5.setTextColor(getResources().getColor(R.color.yellowbrown));
+                        txt3by3.setTextColor(Color.WHITE);
                         boardtype = "5by5";
                         break;
-                    case "imghuman":
-                        imghuman.setImageResource(R.mipmap.txthuman_clikd);
-                        imgcomp.setImageResource(R.mipmap.txtcomp);
+                    case "txthuman":
+                        txthuman.setTextColor(getResources().getColor(R.color.yellowbrown));
+                        txtcomp.setTextColor(Color.WHITE);
                         playvs = "human";
 
                         txtplayername.setVisibility(View.VISIBLE);
                         txtplayername.requestFocus();
                         break;
-                    case "imgcomp":
+                    case "txtcomp":
 
-                        imgcomp.setImageResource(R.mipmap.txtcomp_clikd);
-                        imghuman.setImageResource(R.mipmap.txthuman);
+                        txtcomp.setTextColor(getResources().getColor(R.color.yellowbrown));
+                        txthuman.setTextColor(Color.WHITE);
                         playvs = "comp";
 
                         txtplayername.setVisibility(View.INVISIBLE);

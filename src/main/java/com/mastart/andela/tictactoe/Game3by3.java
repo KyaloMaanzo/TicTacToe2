@@ -3,9 +3,12 @@ package com.mastart.andela.tictactoe;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,9 +36,10 @@ public class Game3by3 extends AppCompatActivity
     private ArrayList<String> mylist;
 
     private AlertDialog dialog;
-    private ImageView img_newgame, img_menu, alertimg_newgame, alertimg_menu, alertimg_close;
+    private TextView txtnewgame, txtmenu;
+    private RelativeLayout alertrl_newgame, alertrl_menu, alertrl_close;
 
-    private int side, myside;
+    private String side, myside;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -53,19 +57,19 @@ public class Game3by3 extends AppCompatActivity
         table3Row2 = tableLayout.findViewById(R.id.table3row2);
         table3Row3 = tableLayout.findViewById(R.id.table3row3);
 
-        img_newgame = findViewById(R.id.img_newgame);
-        img_menu = findViewById(R.id.img_menu);
+        txtnewgame = findViewById(R.id.txtnewgame);
+        txtmenu = findViewById(R.id.txtmenu);
 
-        img_newgame.setOnClickListener(new View.OnClickListener() {
+        txtnewgame.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 RefreshTable();
                 TableSetEnabled(true);
-                img_newgame.setVisibility(View.INVISIBLE);
-                img_menu.setVisibility(View.INVISIBLE);
+                txtnewgame.setVisibility(View.INVISIBLE);
+                txtmenu.setVisibility(View.INVISIBLE);
             }
         });
 
-        img_menu.setOnClickListener(new View.OnClickListener() {
+        txtmenu.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent main = new Intent(context, MainActivity.class);
                 startActivity(main);
@@ -88,17 +92,17 @@ public class Game3by3 extends AppCompatActivity
 
         RefreshMyList();
 
-        final int otherside;
+        final String otherside;
         sideselected = getIntent().getStringExtra("sideselected");
         if(sideselected.equals("x_s"))
         {
-            myside = R.drawable.img_x;
-            otherside = R.drawable.img_o;
+            myside = "X";
+            otherside = "O";
         }
         else
         {
-            myside = R.drawable.img_o;
-            otherside = R.drawable.img_x;
+            myside = "O";
+            otherside = "X";
         }
 
         side = myside;
@@ -107,24 +111,29 @@ public class Game3by3 extends AppCompatActivity
         table3rows.add(table3Row2);
         table3rows.add(table3Row3);
 
+        Typeface tf = ResourcesCompat.getFont(context, R.font.mvboli);
+
         int x = 1;
         for(final TableRow tablerow : table3rows)
         {
             while(x <= 9)
             {
                 final int tmpx = x;
-                final ImageView imgview = new ImageView(context);
-                imgview.setLayoutParams(rowparams);
-                imgview.setPadding(28,0,0,14);
-                imgview.setId(x);
-                imgview.setOnClickListener(new View.OnClickListener() {
+                final TextView txtview = new TextView(context);
+                txtview.setLayoutParams(rowparams);
+                txtview.setTextColor(Color.WHITE);
+                txtview.setTypeface(tf);
+                txtview.setTextSize(35f);
+                txtview.setGravity(Gravity.CENTER);
+                txtview.setId(x);
+                txtview.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        if(imgview.getTag() == null)
+                        if(txtview.getTag() == null)
                         {
-                            imgview.setImageResource(side);
+                            txtview.setText(side);
                             if(side == myside)
                             {
-                                imgview.setTag("has_myside");
+                                txtview.setTag("has_myside");
                                 if(playvs.equals("human"))
                                 {
                                     side = otherside;
@@ -132,7 +141,7 @@ public class Game3by3 extends AppCompatActivity
                             }
                             else
                             {
-                                imgview.setTag("has_otherside");
+                                txtview.setTag("has_otherside");
                                 if(playvs.equals("human"))
                                 {
                                     side = myside;
@@ -158,21 +167,21 @@ public class Game3by3 extends AppCompatActivity
 
                                     if(randomid < 4)
                                     {
-                                        ImageView randomimgview = (ImageView) table3Row1.getChildAt(randomid-1);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table3Row1.getChildAt(randomid-1);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     else if(randomid < 7)
                                     {
-                                        ImageView randomimgview = (ImageView) table3Row2.getChildAt(randomid-4);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table3Row2.getChildAt(randomid-4);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     else
                                     {
-                                        ImageView randomimgview = (ImageView) table3Row3.getChildAt(randomid-7);
-                                        randomimgview.setImageResource(otherside);
-                                        randomimgview.setTag("has_otherside");
+                                        TextView randomtxtview = (TextView) table3Row3.getChildAt(randomid-7);
+                                        randomtxtview.setText(otherside);
+                                        randomtxtview.setTag("has_otherside");
                                     }
                                     //check if comp wins
                                     CheckForWinner();
@@ -189,7 +198,7 @@ public class Game3by3 extends AppCompatActivity
 
                     }
                 });
-                tablerow.addView(imgview);
+                tablerow.addView(txtview);
 
                 x++;
                 if(x == 4 || x == 7){ break; }
@@ -230,9 +239,9 @@ public class Game3by3 extends AppCompatActivity
         {
             for(int x=0;x<3;x++)
             {
-                ImageView imgview = (ImageView)tr.getChildAt(x);
-                imgview.setImageResource(0);
-                imgview.setTag(null);
+                TextView txtview = (TextView)tr.getChildAt(x);
+                txtview.setText("");
+                txtview.setTag(null);
             }
 
         }
@@ -245,8 +254,8 @@ public class Game3by3 extends AppCompatActivity
         {
             for(int x=0;x<3;x++)
             {
-                ImageView imgview = (ImageView)tr.getChildAt(x);
-                imgview.setEnabled(enable);
+                TextView txtview = (TextView)tr.getChildAt(x);
+                txtview.setEnabled(enable);
             }
 
         }
@@ -256,16 +265,16 @@ public class Game3by3 extends AppCompatActivity
     {
         for(TableRow tr : table3rows)
         {
-            ImageView img = (ImageView)tr.getChildAt(0);
-            String whichside = (String)img.getTag();
+            TextView txt = (TextView)tr.getChildAt(0);
+            String whichside = (String)txt.getTag();
             if(whichside != null)
             {
                 //compare with index 1 & 2
-                ImageView tmpimg = (ImageView)tr.getChildAt(1);
-                String tmpwhichside = (String)tmpimg.getTag();
+                TextView tmptxt = (TextView)tr.getChildAt(1);
+                String tmpwhichside = (String)tmptxt.getTag();
 
-                ImageView tmpimg2 = (ImageView)tr.getChildAt(2);
-                String tmpwhichside2 = (String)tmpimg2.getTag();
+                TextView tmptxt2 = (TextView)tr.getChildAt(2);
+                String tmpwhichside2 = (String)tmptxt2.getTag();
 
                 if(tmpwhichside != null && tmpwhichside2 != null)
                 {
@@ -284,21 +293,19 @@ public class Game3by3 extends AppCompatActivity
 
     private Boolean CheckDiagWinner()
     {
-        String whichside;
-
-        ImageView img = (ImageView)table3Row2.getChildAt(1);
-        whichside = (String)img.getTag();
+        TextView txt = (TextView)table3Row2.getChildAt(1);
+        String whichside = (String)txt.getTag();
 
         if(whichside != null)
         {
             int b = 0, c=2;
             for(int k=1;k<=2;k++)
             {
-                ImageView tmpimg = (ImageView)table3Row1.getChildAt(b);
-                String tmpwhichside = (String)tmpimg.getTag();
+                TextView tmptxt = (TextView)table3Row1.getChildAt(b);
+                String tmpwhichside = (String)tmptxt.getTag();
 
-                ImageView tmpimg2 = (ImageView)table3Row3.getChildAt(c);
-                String tmpwhichside2 = (String)tmpimg2.getTag();
+                TextView tmptxt2 = (TextView)table3Row3.getChildAt(c);
+                String tmpwhichside2 = (String)tmptxt2.getTag();
 
                 if(tmpwhichside != null && tmpwhichside2 != null)
                 {
@@ -322,16 +329,16 @@ public class Game3by3 extends AppCompatActivity
     {
         for(int y=0;y<3;y++)
         {
-            ImageView img = (ImageView)table3Row1.getChildAt(y);
+            TextView img = (TextView)table3Row1.getChildAt(y);
             String whichside = (String)img.getTag();
 
             if(whichside != null)
             {
-                ImageView tmpimg = (ImageView)table3Row2.getChildAt(y);
-                String tmpwhichside = (String)tmpimg.getTag();
+                TextView tmptxt = (TextView)table3Row2.getChildAt(y);
+                String tmpwhichside = (String)tmptxt.getTag();
 
-                ImageView tmpimg2 = (ImageView)table3Row3.getChildAt(y);
-                String tmpwhichside2 = (String)tmpimg2.getTag();
+                TextView tmptxt2 = (TextView)table3Row3.getChildAt(y);
+                String tmpwhichside2 = (String)tmptxt2.getTag();
 
                 if(tmpwhichside != null && tmpwhichside2 != null)
                 {
@@ -361,14 +368,11 @@ public class Game3by3 extends AppCompatActivity
         txt1 = view.findViewById(R.id.alertdialog_txt1);
         txt2 = view.findViewById(R.id.alertdialog_txt2);
 
-        alertimg_newgame = view.findViewById(R.id.alertimg_new_game);
-        alertimg_menu = view.findViewById(R.id.alertimg_menu);
-        alertimg_close = view.findViewById(R.id.alertimg_close);
+        alertrl_newgame = view.findViewById(R.id.alertrl_newgame);
+        alertrl_menu = view.findViewById(R.id.alertrl_menu);
+        alertrl_close = view.findViewById(R.id.alertrl_close);
 
         otheruser.setText(player2name+"'s Score: ");
-
-        alertimg_newgame.setClipToOutline(true);
-        alertimg_menu.setClipToOutline(true);
 
         if(side.equals("has_myside"))
         {
@@ -408,30 +412,30 @@ public class Game3by3 extends AppCompatActivity
 
         dialog = alert.create();
 
-        alertimg_newgame.setOnTouchListener(MyTouchListener(alertimg_newgame));
-        alertimg_menu.setOnTouchListener(MyTouchListener(alertimg_menu));
-        alertimg_close.setOnTouchListener(MyTouchListener(alertimg_close));
+        alertrl_newgame.setOnTouchListener(MyTouchListener(alertrl_newgame));
+        alertrl_menu.setOnTouchListener(MyTouchListener(alertrl_menu));
+        alertrl_close.setOnTouchListener(MyTouchListener(alertrl_close));
 
         dialog.show();
     }
 
-    private View.OnTouchListener MyTouchListener(final ImageView imgview)
+    private View.OnTouchListener MyTouchListener(final RelativeLayout rl)
     {
         return (new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction())
                 {
                     case MotionEvent.ACTION_DOWN:
-                        imgview.setBackgroundResource(R.drawable.alertimg_style_clikd);
+                        rl.setBackgroundResource(R.drawable.alertrl_style_clikd);
                         break;
                     case MotionEvent.ACTION_UP:
-                        imgview.setBackgroundResource(0);
-                        if(imgview == alertimg_newgame)
+                        rl.setBackgroundResource(0);
+                        if(rl == alertrl_newgame)
                         {
                             dialog.dismiss();
                             RefreshTable();
                         }
-                        else if(imgview == alertimg_menu)
+                        else if(rl == alertrl_menu)
                         {
                             dialog.dismiss();
                             Intent main = new Intent(context, MainActivity.class);
@@ -441,8 +445,8 @@ public class Game3by3 extends AppCompatActivity
                         {
                             dialog.dismiss();
                             TableSetEnabled(false);
-                            img_newgame.setVisibility(View.VISIBLE);
-                            img_menu.setVisibility(View.VISIBLE);
+                            txtnewgame.setVisibility(View.VISIBLE);
+                            txtmenu.setVisibility(View.VISIBLE);
 
                         }
                         break;

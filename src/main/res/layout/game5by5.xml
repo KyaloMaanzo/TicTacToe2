@@ -123,24 +123,26 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="63dp">
-        <ImageView
+        <TextView
             android:visibility="invisible"
-            android:layout_marginTop="8dp"
-            android:layout_marginLeft="21dp"
-            android:layout_marginBottom="8dp"
-            android:src="@drawable/img_newgame"
-            android:id="@+id/img_newgame"
+            android:id="@+id/txtnewgame"
+            android:text="new game"
+            android:textSize="28dp"
+            android:paddingLeft="28dp"
+            android:textColor="@color/yellowbrown"
+            android:fontFamily="@font/mvboli"
             android:layout_weight="1"
-            android:paddingRight="42dp"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
-        <ImageView
+        <TextView
+            android:textColor="@color/yellowbrown"
+            android:fontFamily="@font/mvboli"
+            android:textSize="28dp"
+            android:text="menu"
+            android:paddingRight="28dp"
+            android:gravity="right"
             android:visibility="invisible"
-            android:paddingLeft="42dp"
-            android:src="@drawable/img_menu"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            android:id="@+id/img_menu"
+            android:id="@+id/txtmenu"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent" />
