@@ -72,7 +72,7 @@
     </LinearLayout>
     <TableLayout
         android:layout_centerInParent="true"
-        android:background="#125B14"
+        android:background="@drawable/board5by5"
         android:id="@+id/tablelayout"
         android:layout_width="295dp"
         android:layout_height="295dp">
@@ -112,11 +112,6 @@
 
         </TableRow>
     </TableLayout>
-    <ImageView
-        android:src="@drawable/board5by5"
-        android:layout_centerInParent="true"
-        android:layout_width="295dp"
-        android:layout_height="295dp" />
     <LinearLayout
         android:layout_marginTop="21dp"
         android:layout_below="@+id/tablelayout"
