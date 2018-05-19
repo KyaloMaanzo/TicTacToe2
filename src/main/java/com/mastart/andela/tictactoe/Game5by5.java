@@ -19,6 +19,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Game5by5 extends AppCompatActivity
@@ -33,7 +34,7 @@ public class Game5by5 extends AppCompatActivity
     private Integer mypoints_int = 0, otheruserpoints_int = 0;
 
     private ArrayList<TableRow> table5rows = new ArrayList<TableRow>();
-    private ArrayList<String> mylist;
+    private ArrayList<String> mylist, ai_list;
 
     private AlertDialog dialog;
     private TextView txtnewgame, txtmenu;
@@ -42,8 +43,11 @@ public class Game5by5 extends AppCompatActivity
     ArrayList<TableRow> rows = new ArrayList<>();
     ArrayList<TableRow> rowsfor1 = new ArrayList<>();
     ArrayList<TableRow> rowsfor2 = new ArrayList<>();
+    ArrayList<TableRow> rowsto_loop1 = new ArrayList<>();
+    ArrayList<TableRow> rowsto_loop2 = new ArrayList<>();
 
-    private String side, myside;
+    private String side, myside, otherside;
+
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -101,7 +105,6 @@ public class Game5by5 extends AppCompatActivity
 
         RefreshMyList();
 
-        final String otherside;
         sideselected = getIntent().getStringExtra("sideselected");
         if(sideselected.equals("x_s"))
         {
@@ -136,7 +139,7 @@ public class Game5by5 extends AppCompatActivity
                         if(txtview.getTag() == null)
                         {
                             txtview.setText(side);
-                            if(side == myside)
+                            if(side.equals(myside))
                             {
                                 txtview.setTag("has_myside");
                                 if(playvs.equals("human"))
@@ -157,47 +160,14 @@ public class Game5by5 extends AppCompatActivity
                             //check for winner
                             if(CheckForWinner() == true){ return; }
 
-                            int mylistsize = mylist.size();
-                            if(mylistsize >0)
+                            if(mylist.size() >0)
                             {
                                 if(!playvs.equals("human"))
                                 {
-                                    int randomindex = ThreadLocalRandom.current().nextInt(0, mylistsize);
+                                    int ran_no = ThreadLocalRandom.current().nextInt(2);
 
-                                    //id of img to place otherside
-                                    int randomid = Integer.parseInt(mylist.get(randomindex));
-                                    mylist.remove(Integer.toString(randomid));
-
-                                    if(randomid < 6)
-                                    {
-                                        TextView randomtxtview = (TextView) table5Row1.getChildAt(randomid-1);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
-                                    else if(randomid < 11)
-                                    {
-                                        TextView randomtxtview = (TextView) table5Row2.getChildAt(randomid-6);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
-                                    else if(randomid < 16)
-                                    {
-                                        TextView randomtxtview = (TextView) table5Row3.getChildAt(randomid-11);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
-                                    else if(randomid < 21)
-                                    {
-                                        TextView randomtxtview = (TextView) table5Row4.getChildAt(randomid-16);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
-                                    else
-                                    {
-                                        TextView randomtxtview = (TextView) table5Row5.getChildAt(randomid-21);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
+                                    if(ran_no == 0) { PickRandomBox(); }
+                                    else{ AI(); }
 
                                     //check if comp wins
                                     CheckForWinner();
@@ -214,6 +184,89 @@ public class Game5by5 extends AppCompatActivity
 
                         }
 
+                    }
+
+                    private void PickRandomBox()
+                    {
+                        int randomindex = ThreadLocalRandom.current().nextInt(0, mylist.size());
+
+                        //id of img to place otherside
+                        int randomid = Integer.parseInt(mylist.get(randomindex));
+                        mylist.remove(Integer.toString(randomid));
+
+                        TextView randomtxtview;
+                        if(randomid < 6)
+                        {
+                            randomtxtview = (TextView) table5Row1.getChildAt(randomid-1);
+                        }
+                        else if(randomid < 11)
+                        {
+                            randomtxtview = (TextView) table5Row2.getChildAt(randomid-6);
+                        }
+                        else if(randomid < 16)
+                        {
+                            randomtxtview = (TextView) table5Row3.getChildAt(randomid-11);
+                        }
+                        else if(randomid < 21)
+                        {
+                            randomtxtview = (TextView) table5Row4.getChildAt(randomid-16);
+                        }
+                        else
+                        {
+                            randomtxtview = (TextView) table5Row5.getChildAt(randomid-21);
+                        }
+
+                        randomtxtview.setText(otherside);
+                        randomtxtview.setTag("has_otherside");
+                    }
+
+                    private void AI()
+                    {
+                        //rows
+                        for(TableRow tableRow : table5rows)
+                        {
+                            if(AIRows(tableRow, 0, 4) == true)
+                            {
+                                return;
+                            }
+
+                            if(AIRows(tableRow, 1,5) == true)
+                            {
+                                return;
+                            }
+                        }
+
+                        //columns
+                        for(int colno=0;colno<5;colno++)
+                        {
+                            if(AICols(colno, rowsto_loop1) == true)
+                            {
+                                return;
+                            }
+
+                            if(AICols(colno, rowsto_loop2) == true)
+                            {
+                                return;
+                            }
+                        }
+
+                        //diagonals
+                        for(int q=0;q<5;q++)
+                        {
+                            if(q==2){  continue; }
+
+                            if(AIDiags(rowsto_loop1, q)==true)
+                            {
+                                return;
+                            }
+
+                            if(AIDiags(rowsto_loop2, q)==true)
+                            {
+                                return;
+                            }
+                        }
+
+                        PickRandomBox();
                     }
                 });
                 tablerow.addView(txtview);
@@ -245,6 +298,16 @@ public class Game5by5 extends AppCompatActivity
         rowsfor2.add(table5Row3);
         rowsfor2.add(table5Row4);
         rowsfor2.add(table5Row5);
+
+        rowsto_loop1.add(table5Row1);
+        rowsto_loop1.add(table5Row2);
+        rowsto_loop1.add(table5Row3);
+        rowsto_loop1.add(table5Row4);
+
+        rowsto_loop2.add(table5Row2);
+        rowsto_loop2.add(table5Row3);
+        rowsto_loop2.add(table5Row4);
+        rowsto_loop2.add(table5Row5);
     }
 
     private Boolean CheckForWinner()
@@ -273,9 +336,134 @@ public class Game5by5 extends AppCompatActivity
         return false;
     }
 
+    private int CheckAIList()
+    {
+        int nohas_myside = Collections.frequency(ai_list, "has_myside");
+        int nohas_otherside = Collections.frequency(ai_list, "has_otherside");
+
+        if(nohas_myside >2)
+        {
+            int indexofnull = ai_list.indexOf("null");
+            return indexofnull;
+        }
+
+        if(nohas_otherside >2)
+        {
+            int indexofnull = ai_list.indexOf("null");
+            return indexofnull;
+        }
+
+        return -1;
+    }
+
+    private Boolean AIRows(TableRow tablerow, int start, int end)
+    {
+        ai_list = new ArrayList<>();
+
+        for(int x=start;x<end;x++)
+        {
+            TextView txtview = (TextView)tablerow.getChildAt(x);
+            String txttag = (String)txtview.getTag();
+
+            if(txttag == null){ ai_list.add("null"); }
+            else{ ai_list.add(txttag); }
+        }
+
+        int a = CheckAIList();
+        if(a != -1)
+        {
+            TextView txt;
+            if(start == 0)
+            {
+                txt = (TextView)tablerow.getChildAt(a);
+            }
+            else
+            {
+                txt = (TextView)tablerow.getChildAt(a+1);
+            }
+
+            txt.setText(otherside);
+            txt.setTag("has_otherside");
+            int id = txt.getId();
+            mylist.remove(Integer.toString(id));
+            return true;
+        }
+
+        return false;
+    }
+
+    private Boolean AICols(int colno, ArrayList<TableRow> rowsto_loop)
+    {
+        ai_list = new ArrayList<>();
+        for(TableRow tr : rowsto_loop)
+        {
+            TextView txtview = (TextView)tr.getChildAt(colno);
+            String txttag = (String)txtview.getTag();
+
+            if(txttag == null){ ai_list.add("null"); }
+            else{ ai_list.add(txttag); }
+        }
+
+        int a = CheckAIList();
+
+        if(a != -1)
+        {
+            TableRow tr = rowsto_loop.get(a);
+
+            TextView txtview = (TextView)tr.getChildAt(colno);
+            txtview.setText(otherside);
+            txtview.setTag("has_otherside");
+            int id = txtview.getId();
+            mylist.remove(Integer.toString(id));
+            return true;
+        }
+        return false;
+    }
+
+    private Boolean AIDiags(ArrayList<TableRow> rowstoloop, int startindex)
+    {
+        ai_list = new ArrayList<>();
+        int index = startindex;
+        for(TableRow tr : rowstoloop)
+        {
+            TextView txtview = (TextView)tr.getChildAt(index);
+            String txttag = (String)txtview.getTag();
+
+            if(txttag != null){ ai_list.add(txttag); }
+            else{ ai_list.add("null"); }
+
+            if(startindex ==3 || startindex==4 ){ index--; }
+            else{ index++; }
+
+        }
+
+        int a = CheckAIList();
+        if(a != -1)
+        {
+            TableRow tableRow = rowstoloop.get(a);
+
+            TextView txtview;
+            if(startindex == 3 || startindex==4)
+            {
+                txtview = (TextView)tableRow.getChildAt(startindex-a);
+            }
+            else
+            {
+                txtview = (TextView)tableRow.getChildAt(a+startindex);
+            }
+            txtview.setText(otherside);
+            txtview.setTag("has_otherside");
+            int id = txtview.getId();
+            mylist.remove(Integer.toString(id));
+            return true;
+        }
+
+        return false;
+    }
+
     private void RefreshMyList()
     {
-        mylist = new ArrayList<String>();
+        mylist = new ArrayList<>();
         for(int no=1;no<=25;no++)
         {
             mylist.add(Integer.toString(no));

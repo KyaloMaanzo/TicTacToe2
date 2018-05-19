@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -20,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Game3by3 extends AppCompatActivity
@@ -33,13 +37,13 @@ public class Game3by3 extends AppCompatActivity
     private Integer mypoints_int = 0, otheruserpoints_int = 0;
 
     private ArrayList<TableRow> table3rows = new ArrayList<TableRow>();
-    private ArrayList<String> mylist;
+    private ArrayList<String> mylist, ai_list;
 
     private AlertDialog dialog;
     private TextView txtnewgame, txtmenu;
     private RelativeLayout alertrl_newgame, alertrl_menu, alertrl_close;
 
-    private String side, myside;
+    private String side, myside, otherside;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -92,7 +96,6 @@ public class Game3by3 extends AppCompatActivity
 
         RefreshMyList();
 
-        final String otherside;
         sideselected = getIntent().getStringExtra("sideselected");
         if(sideselected.equals("x_s"))
         {
@@ -114,7 +117,7 @@ public class Game3by3 extends AppCompatActivity
         Typeface tf = ResourcesCompat.getFont(context, R.font.mvboli);
 
         int x = 1;
-        for(final TableRow tablerow : table3rows)
+        for(TableRow tablerow : table3rows)
         {
             while(x <= 9)
             {
@@ -131,7 +134,7 @@ public class Game3by3 extends AppCompatActivity
                         if(txtview.getTag() == null)
                         {
                             txtview.setText(side);
-                            if(side == myside)
+                            if(side.equals(myside))
                             {
                                 txtview.setTag("has_myside");
                                 if(playvs.equals("human"))
@@ -153,36 +156,15 @@ public class Game3by3 extends AppCompatActivity
                             //check for winner
                             if(CheckForWinner() == true){ return; }
 
-
-                            int mylistsize = mylist.size();
-                            if(mylistsize >0)
+                            if(mylist.size() >0)
                             {
                                 if(!playvs.equals("human"))
                                 {
-                                    int randomindex = ThreadLocalRandom.current().nextInt(0, mylistsize);
+                                    int ran_no = ThreadLocalRandom.current().nextInt(2);    //AI
 
-                                    //id of img to place otherside
-                                    int randomid = Integer.parseInt(mylist.get(randomindex));
-                                    mylist.remove(Integer.toString(randomid));
+                                    if(ran_no == 0) { PickRandomBox(); }
+                                    else{ AI(); }
 
-                                    if(randomid < 4)
-                                    {
-                                        TextView randomtxtview = (TextView) table3Row1.getChildAt(randomid-1);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
-                                    else if(randomid < 7)
-                                    {
-                                        TextView randomtxtview = (TextView) table3Row2.getChildAt(randomid-4);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
-                                    else
-                                    {
-                                        TextView randomtxtview = (TextView) table3Row3.getChildAt(randomid-7);
-                                        randomtxtview.setText(otherside);
-                                        randomtxtview.setTag("has_otherside");
-                                    }
                                     //check if comp wins
                                     CheckForWinner();
                                 }
@@ -196,6 +178,47 @@ public class Game3by3 extends AppCompatActivity
 
                         }
 
+                    }
+
+                    private void PickRandomBox()
+                    {
+                        Log.i("MYTAG", "Picked Random Box");
+                        int randomindex = ThreadLocalRandom.current().nextInt(0, mylist.size());
+
+                        //id of img to place otherside
+                        int randomid = Integer.parseInt(mylist.get(randomindex));
+                        mylist.remove(Integer.toString(randomid));
+
+                        TextView randomtxtview;
+                        if(randomid < 4)
+                        {
+                            randomtxtview = (TextView) table3Row1.getChildAt(randomid-1);
+                        }
+                        else if(randomid < 7)
+                        {
+                            randomtxtview = (TextView) table3Row2.getChildAt(randomid-4);
+                        }
+                        else
+                        {
+                            randomtxtview = (TextView) table3Row3.getChildAt(randomid-7);
+                        }
+
+                        randomtxtview.setText(otherside);
+                        randomtxtview.setTag("has_otherside");
+                    }
+
+                    private void AI()
+                    {
+                        if(AIDiags("") == false)
+                        {
+                            if(AIRows() == false)
+                            {
+                                if(AICols() == false)
+                                {
+                                    PickRandomBox();
+                                }
+                            }
+                        }
                     }
                 });
                 tablerow.addView(txtview);
@@ -220,6 +243,150 @@ public class Game3by3 extends AppCompatActivity
             else{ return true; }
         }
         else{ return true; }
+        return false;
+    }
+
+    private int CheckAIList()
+    {
+        int nohas_myside = Collections.frequency(ai_list, "has_myside");
+        int nohas_otherside = Collections.frequency(ai_list, "has_otherside");
+
+        if(nohas_myside >1)
+        {
+            int indexofnull = ai_list.indexOf("null");
+            return indexofnull;
+        }
+
+        if(nohas_otherside >1)
+        {
+            int indexofnull = ai_list.indexOf("null");
+            return indexofnull;
+        }
+
+        return -1;
+    }
+
+    private Boolean AIDiags(String direction)
+    {
+        ai_list = new ArrayList<>();
+        int startindex;
+
+        if(direction.equals("reverse")){ startindex = 2; }
+        else { startindex = 0; }
+
+        for(TableRow tableRow : table3rows)
+        {
+            TextView txtview = (TextView) tableRow.getChildAt(startindex);
+            String txttag = (String)txtview.getTag();
+
+            if(txttag != null){ ai_list.add(txttag); }
+            else{ ai_list.add("null"); }
+
+            if(direction.equals("reverse")){ startindex--; }
+            else{ startindex++; }
+
+        }
+
+        //check AI list
+        int a = CheckAIList();
+        if(a != -1)
+        {
+            TableRow tr;
+            int index;
+            if(a == 0)
+            {
+                tr = table3Row1;
+                index = direction.equals("reverse")? 2 : 0;
+            }
+            else if(a == 1)
+            {
+                tr = table3Row2;
+                index = 1;
+            }
+            else
+            {
+                tr = table3Row3;
+                index = direction.equals("reverse")? 0 : 2;
+            }
+
+            TextView txtview = (TextView) tr.getChildAt(index);
+            txtview.setText(otherside);
+            txtview.setTag("has_otherside");
+            int id = txtview.getId();
+            mylist.remove(Integer.toString(id));
+            return true;
+        }
+        else
+        {
+            //check second diagonal
+            if(startindex ==3)
+            {
+                if(AIDiags("reverse")== true){ return true; }
+            }
+        }
+
+        return false;
+    }
+
+    private Boolean AIRows()
+    {
+        for(TableRow tableRow : table3rows)
+        {
+            ai_list = new ArrayList<>();
+            for(int x=0;x<3;x++)
+            {
+                TextView txtview = (TextView)tableRow.getChildAt(x);
+                String txttag = (String)txtview.getTag();
+
+                if(txttag != null){ ai_list.add(txttag); }
+                else{ ai_list.add("null"); }
+            }
+
+            int a = CheckAIList();
+            if(a != -1)
+            {
+                TextView txtview = (TextView)tableRow.getChildAt(a);
+                txtview.setText(otherside);
+                txtview.setTag("has_otherside");
+                int id = txtview.getId();
+                mylist.remove(Integer.toString(id));
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Boolean AICols()
+    {
+        for(int x=0;x<3;x++)
+        {
+            ai_list = new ArrayList<>();
+            for(TableRow tableRow : table3rows)
+            {
+                TextView txtview = (TextView)tableRow.getChildAt(x);
+                String txttag = (String)txtview.getTag();
+
+                if(txttag != null){ ai_list.add(txttag); }
+                else{ ai_list.add("null"); }
+            }
+
+            int a = CheckAIList();
+
+            if(a != -1)
+            {
+                TableRow tr = table3rows.get(a);
+
+                TextView txtview = (TextView)tr.getChildAt(x);
+                txtview.setText(otherside);
+                txtview.setTag("has_otherside");
+                int id = txtview.getId();
+                mylist.remove(Integer.toString(id));
+                return true;
+            }
+
+        }
+
         return false;
     }
 
